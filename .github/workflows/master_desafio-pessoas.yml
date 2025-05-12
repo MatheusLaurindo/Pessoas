@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: read # This is required for actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -23,33 +23,30 @@ jobs:
       - name: Set up Node.js for Vite
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Ajuste para a versão que seu projeto utiliza
+          node-version: '18'
 
-      - name: Install dependencies (npm)
+      - name: Install frontend dependencies
         run: npm install
-        working-directory: ./pessoas.client  # Caminho para a pasta do seu frontend
+        working-directory: ./pessoas.client
 
-      - name: Build frontend (Vite)
+      - name: Build frontend
         run: npm run build
-        working-directory: ./pessoas.client  # Caminho para a pasta do seu frontend
+        working-directory: ./pessoas.client
 
       - name: Build .NET app
         run: dotnet build --configuration Release
 
       - name: Publish .NET app
-        run: dotnet publish -c Release -o "./myapp"  # Usando um caminho relativo ao diretório do pipeline
+        run: dotnet publish -c Release -o ./publish
 
-      # Passo para listar os arquivos no diretório de publicação
-      - name: List files in the publish directory
-        run: |
-          echo "Listing files in the publish directory:"
-          dir "./myapp"  # Usando um caminho relativo para a pasta
+      - name: List published files (debug)
+        run: dir ./publish
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ./myapp  # Usando o caminho relativo
+          path: ./publish
 
   deploy:
     runs-on: windows-latest
@@ -58,14 +55,15 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write # This is required for requesting the JWT
-      contents: read # This is required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
+          path: ./publish
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -74,16 +72,10 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B2B79059C501460D9637CA5F75FB378A }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F6B3E471DEAD4C5882DE1A02E83201EB }}
 
-      # Passo para verificar o conteúdo da pasta de artefato antes do deploy
-      - name: Check files in the publish directory
-        run: |
-          echo "Listing files in ./myapp"
-          dir "./myapp"  # Usando o caminho relativo para verificar os arquivos antes do deploy
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'desafio-pessoas'
           slot-name: 'Production'
-          package: "./myapp"  # Usando o caminho relativo para o pacote
+          package: ./publish
