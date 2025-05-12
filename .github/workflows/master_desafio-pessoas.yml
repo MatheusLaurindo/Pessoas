@@ -37,19 +37,19 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Publish .NET app
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish -c Release -o "./myapp"  # Usando um caminho relativo ao diretório do pipeline
 
       # Passo para listar os arquivos no diretório de publicação
       - name: List files in the publish directory
         run: |
           echo "Listing files in the publish directory:"
-          dir "${{env.DOTNET_ROOT}}\\myapp"  # Usando a barra invertida para caminhos no Windows
+          dir "./myapp"  # Usando um caminho relativo para a pasta
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ./myapp  # Usando o caminho relativo
 
   deploy:
     runs-on: windows-latest
@@ -77,8 +77,8 @@ jobs:
       # Passo para verificar o conteúdo da pasta de artefato antes do deploy
       - name: Check files in the publish directory
         run: |
-          echo "Listing files in ${{env.DOTNET_ROOT}}\\myapp"
-          dir "${{env.DOTNET_ROOT}}\\myapp"  # Usando a barra invertida para caminhos no Windows
+          echo "Listing files in ./myapp"
+          dir "./myapp"  # Usando o caminho relativo para verificar os arquivos antes do deploy
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -86,4 +86,4 @@ jobs:
         with:
           app-name: 'desafio-pessoas'
           slot-name: 'Production'
-          package: "${{env.DOTNET_ROOT}}/myapp/"  # Caminho completo, com barra final
+          package: "./myapp"  # Usando o caminho relativo para o pacote
