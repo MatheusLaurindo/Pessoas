@@ -41,7 +41,9 @@ jobs:
 
       # Adicionando passo para listar os arquivos no diretório de publicação
       - name: List files in the publish directory
-        run: dir ${{env.DOTNET_ROOT}}/myapp
+        run: |
+          echo "Listing files in the publish directory:"
+          dir "${{env.DOTNET_ROOT}}/myapp"  # Colocando o caminho entre aspas
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -76,7 +78,7 @@ jobs:
       - name: Check files in the publish directory
         run: |
           echo "Listing files in ${{env.DOTNET_ROOT}}/myapp"
-          dir ${{env.DOTNET_ROOT}}/myapp
+          dir "${{env.DOTNET_ROOT}}/myapp"  # Colocando o caminho entre aspas
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -84,4 +86,4 @@ jobs:
         with:
           app-name: 'desafio-pessoas'
           slot-name: 'Production'
-          package: ${{env.DOTNET_ROOT}}/myapp/   # Caminho completo, com barra final
+          package: "${{env.DOTNET_ROOT}}/myapp/"  # Caminho completo, com barra final
