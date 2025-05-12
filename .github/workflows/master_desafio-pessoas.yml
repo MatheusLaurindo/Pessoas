@@ -23,7 +23,7 @@ jobs:
       - name: Set up Node.js for Vite
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Ajuste para a versão que seu projeto utiliza
+          node-version: '16'  # Ajuste para a versão que seu projeto utiliza
 
       - name: Install dependencies (npm)
         run: npm install
@@ -74,4 +74,4 @@ jobs:
         with:
           app-name: 'desafio-pessoas'
           slot-name: 'Production'
-          package: ${{env.DOTNET_ROOT}}/myapp
+          package: ${{env.DOTNET_ROOT}}/myapp  # Ajustado para o caminho correto
