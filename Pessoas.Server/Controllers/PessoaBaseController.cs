@@ -40,7 +40,7 @@ namespace Pessoas.Server.Controllers
         {
             var pessoas = await _service.GetAllPaginatedAsync(pagina, linhasPorPagina);
 
-            return Ok(APITypedResponse<IEnumerable<GetPessoaResp>>.Create(pessoas, true, ""));
+            return Ok(APIPaginatedResponse<IEnumerable<GetPessoaResp>>.Create(pessoas.Data, pessoas.Total));
         }
 
         /// <summary>

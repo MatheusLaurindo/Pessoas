@@ -10,10 +10,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Habilita arquivos estáticos do SPA
-builder.Services.AddSpaStaticFiles(configuration =>
+if (!builder.Environment.IsDevelopment())
 {
-    configuration.RootPath = "../pessoas.client/dist";
-});
+    builder.Services.AddSpaStaticFiles(configuration =>
+    {
+        configuration.RootPath = "../pessoas.client/dist";
+    });
+}
 
 // Instalar serviços via padrão Installer
 builder.Services.InstallServicesFromAssembly(builder.Configuration);
@@ -30,7 +33,11 @@ using (var scope = app.Services.CreateScope())
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
-app.UseSpaStaticFiles(); // Agora vai funcionar sem erro
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseSpaStaticFiles();
+}
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>
@@ -52,7 +59,7 @@ app.MapControllers();
 // Fallback para SPA
 app.UseSpa(spa =>
 {
-    spa.Options.SourcePath = "../pessoas.client"; // usado apenas no dev
+    spa.Options.SourcePath = "../pessoas.client"; 
 });
 
 app.MapFallbackToFile("/index.html");

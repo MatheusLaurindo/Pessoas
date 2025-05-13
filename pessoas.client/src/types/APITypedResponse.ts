@@ -3,3 +3,8 @@ export type APITypedResponse<T> = {
   data: T;
   mensagem: string;
 };
+
+export type APIPaginatedResponse<T> = {
+  total: number;
+  dados: T[];
+};

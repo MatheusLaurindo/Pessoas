@@ -100,7 +100,7 @@ public class PessoaServiceTests
 
         // Assert
         Assert.NotNull(resultado);
-        Assert.Equal(5, resultado.Count());
+        Assert.Equal(5, resultado.Data.Count());
     }
 
     [Fact(DisplayName = "AddAsync - Deve adicionar pessoa com sucesso")]

@@ -11,7 +11,7 @@ namespace Pessoas.Server.Extensoes
                 Id = p.Id,
                 Nome = p.Nome,
                 Email = p.Email,
-                DataNascimento = p.DataNascimento,
+                DataNascimento = p.DataNascimento.ToShortDateString(),
                 Cpf = p.Cpf,
                 Sexo = p.Sexo.ToString(),
                 Nacionalidade = p.Nacionalidade.ToString(),
