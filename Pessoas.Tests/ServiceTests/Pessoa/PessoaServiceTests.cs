@@ -252,7 +252,7 @@ public class PessoaServiceTests
         {
             Nome = "joao da silva",
             Email = "email@gmail.com",
-            DataNascimento = DateTime.UtcNow.AddYears(1).ToShortDateString(),
+            DataNascimento = "12/12/3012",
             Cpf = "123.123.123-12",
             Sexo = Sexo.Masculino,
             Nacionalidade = Nacionalidade.Brasileira,
@@ -293,7 +293,7 @@ public class PessoaServiceTests
             Id = pessoa.Id,
             Nome = "Ana Atualizada",
             Email = "ana@nova.com",
-            DataNascimento = Convert.ToDateTime(pessoa.DataNascimento).ToShortDateString(),
+            DataNascimento = "12/12/2002",
             Cpf = pessoa.Cpf,
             Sexo = pessoa.Sexo,
             Nacionalidade = pessoa.Nacionalidade,
