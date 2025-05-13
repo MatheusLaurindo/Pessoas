@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pessoas.Server.Common;
+using Pessoas.Server.DTOs.Response;
 using Pessoas.Server.Exceptions;
 using Pessoas.Server.Infra;
 using Pessoas.Server.Model;
@@ -16,15 +17,37 @@ namespace Pessoas.Server.Repositories
             .AsNoTracking()
             .ToListAsync();
 
-        public async Task<IEnumerable<Pessoa>> GetAllPaginatedAsync(int pagina, int linhasPorPagina)
+        public async Task<GetPessoaRespPaginado> GetAllPaginatedAsync(int pagina, int linhasPorPagina)
         {
             var query = _contexto.Pessoas
-                .AsNoTracking()
-                .OrderByDescending(x => x.DataCadastro)
-                .Skip((pagina - 1) * linhasPorPagina)
-                .Take(linhasPorPagina);
+                .AsNoTracking();
 
-            return await query.ToListAsync();
+            var count = await query.CountAsync();
+
+            var pessoas = await query
+                .OrderByDescending(x => x.DataCadastro)
+                .Skip(pagina * linhasPorPagina)
+                .Take(linhasPorPagina)
+                .ToListAsync();
+
+            var pessoasResponse = pessoas.Select(p => new GetPessoaResp
+            {
+                Id = p.Id,
+                Nome = p.Nome,
+                Email = p.Email,
+                DataNascimento = p.DataNascimento.ToShortDateString(),
+                Cpf = p.Cpf,
+                Sexo = p.Sexo?.ToString(),
+                Nacionalidade = p.Nacionalidade?.ToString(),
+                Naturalidade = p.Naturalidade,
+                Endereco = p.Endereco
+            });
+
+            return new GetPessoaRespPaginado
+            {
+                Total = count,
+                Data = pessoasResponse
+            };
         }
 
         public async Task<Pessoa> GetByIdAsync(Guid id)

@@ -8,7 +8,7 @@ namespace Pessoas.Server.Services.Interfaces
     public interface IPessoaService
     {
         Task<IEnumerable<GetPessoaResp>> GetAllAsync();
-        Task<IEnumerable<GetPessoaResp>> GetAllPaginatedAsync(int pagina, int linhasPorPagina);
+        Task<GetPessoaRespPaginado> GetAllPaginatedAsync(int pagina, int linhasPorPagina);
         Task<GetPessoaResp> GetByIdAsync(Guid id);
         Task<Result<GetPessoaResp>> AddAsync(AdicionarPessoaRequest pessoa);
         Task<Result<GetPessoaResp>> UpdateAsync(EditarPessoaRequest pessoa);

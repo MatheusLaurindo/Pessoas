@@ -8,7 +8,7 @@ export default function Layout() {
         <h1 className="text-xl font-semibold">Gerenciamento de Pessoas</h1>
       </header>
 
-      <main className="flex-1 flex items-center justify-center">
+      <main className="flex-1 flex justfy-center items-center">
         <ToastContainer />
         <div className="w-full"><Outlet /></div>
       </main>

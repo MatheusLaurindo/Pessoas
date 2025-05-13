@@ -22,7 +22,7 @@
 	</ItemGroup>
 
 	<!-- Build do Vite e cópia para wwwroot -->
-	<Target Name="CopyDist" AfterTargets="Build">
+	<Target Name="CopyDist" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
 		<Exec Command="npm install" WorkingDirectory="$(SpaRoot)" />
 		<Exec Command="npm run build" WorkingDirectory="$(SpaRoot)" />
 		<Message Importance="high" Text="Copiando arquivos do dist para wwwroot..." />
@@ -34,6 +34,7 @@
 			  SkipUnchangedFiles="true"
 			  Condition="Exists('$(SpaRoot)$(DistFolder)')" />
 	</Target>
+
 
 	<!-- Garantir que dist seja incluído no publish -->
 	<Target Name="PublishViteApp" AfterTargets="ComputeFilesToPublish">

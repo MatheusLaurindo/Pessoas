@@ -20,11 +20,11 @@ namespace Pessoas.Server.Services
             return pessoas.Select(p => p.ToDto());
         }
 
-        public async Task<IEnumerable<GetPessoaResp>> GetAllPaginatedAsync(int pagina, int linhasPorPagina)
+        public async Task<GetPessoaRespPaginado> GetAllPaginatedAsync(int pagina, int linhasPorPagina)
         {
             var pessoas = await _repository.GetAllPaginatedAsync(pagina, linhasPorPagina);
 
-            return pessoas.Select(p => p.ToDto());
+            return pessoas;
         }
 
         public async Task<GetPessoaResp> GetByIdAsync(Guid id)
