@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const api = axios.create({
-  baseURL: "https://localhost:7117",
+  baseURL: "https://desafio-pessoas-fjbmggemepfwdefd.brazilsouth-01.azurewebsites.net",
   withCredentials: true,
 });
 
