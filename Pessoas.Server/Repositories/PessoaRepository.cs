@@ -37,8 +37,8 @@ namespace Pessoas.Server.Repositories
                 Email = p.Email,
                 DataNascimento = p.DataNascimento.ToShortDateString(),
                 Cpf = p.Cpf,
-                Sexo = p.Sexo?.ToString(),
-                Nacionalidade = p.Nacionalidade?.ToString(),
+                Sexo = p.Sexo?.ToString() == "0" ? "" : p.Sexo.ToString(),
+                Nacionalidade = p.Nacionalidade?.ToString() == "0" ? "" : p.Nacionalidade.ToString(),
                 Naturalidade = p.Naturalidade,
                 Endereco = p.Endereco
             });

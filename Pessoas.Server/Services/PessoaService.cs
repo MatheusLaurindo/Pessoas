@@ -46,7 +46,7 @@ namespace Pessoas.Server.Services
                 var novaPessoa = Pessoa.Create(
                     pessoa.Nome,
                     pessoa.Email,
-                    pessoa.DataNascimento,
+                    Convert.ToDateTime(pessoa.DataNascimento),
                     cpf,
                     pessoa.Sexo,
                     pessoa.Nacionalidade,

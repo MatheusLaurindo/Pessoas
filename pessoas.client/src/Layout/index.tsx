@@ -10,7 +10,7 @@ export default function Layout() {
 
       <main className="flex-1 flex justfy-center items-center">
         <ToastContainer />
-        <div className="w-full"><Outlet /></div>
+        <div className="w-full h-screen"><Outlet /></div>
       </main>
     </div>
   );
