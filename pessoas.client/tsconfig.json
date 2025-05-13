@@ -1,4 +1,10 @@
 {
+  "compilerOptions": {
+    "baseUrl": ".",              // define a base do projeto
+    "paths": {
+      "@/*": ["src/*"]           // define @/ como atalho para src/
+    }
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
