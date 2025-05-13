@@ -80,7 +80,7 @@ namespace Pessoas.Server.DTOs.Request
         /// Data de Nascimento. <b>Obrigatório</b>.
         /// </summary>
         [Required(ErrorMessage = "O parametro 'Data de Nascimento' é obrigatório")]
-        public DateTime DataNascimento { get; init; }
+        public string DataNascimento { get; init; }
 
         /// <summary>
         /// CPF. <b>Obrigatório</b>.
@@ -113,7 +113,7 @@ namespace Pessoas.Server.DTOs.Request
         /// Data de Nascimento. <b>Obrigatório</b>.
         /// </summary>
         [Required(ErrorMessage = "O parametro 'Data de Nascimento' é obrigatório")]
-        public DateTime DataNascimento { get; init; }
+        public string DataNascimento { get; init; }
 
         /// <summary>
         /// CPF. <b>Obrigatório</b>.
