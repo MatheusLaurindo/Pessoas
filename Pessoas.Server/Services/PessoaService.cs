@@ -6,6 +6,7 @@ using Pessoas.Server.Exceptions;
 using Pessoas.Server.Extensoes;
 using Pessoas.Server.Repositories.Interfaces;
 using Pessoas.Server.Services.Interfaces;
+using System.Globalization;
 
 namespace Pessoas.Server.Services
 {
@@ -43,10 +44,12 @@ namespace Pessoas.Server.Services
             {
                 var cpf = pessoa.Cpf.Replace(".", "").Replace("-", "");
 
+                DateTime dataNascimento = DateTime.ParseExact(pessoa.DataNascimento, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
                 var novaPessoa = Pessoa.Create(
                     pessoa.Nome,
                     pessoa.Email,
-                    Convert.ToDateTime(pessoa.DataNascimento),
+                    dataNascimento,
                     cpf,
                     pessoa.Sexo,
                     pessoa.Nacionalidade,
@@ -75,9 +78,11 @@ namespace Pessoas.Server.Services
                 if (pessoaExistente == null)
                     return Result<GetPessoaResp>.Falha("Pessoa não encontrada");
 
+                DateTime dataNascimento = DateTime.ParseExact(pessoa.DataNascimento, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
                 pessoaExistente.SetNome(pessoa.Nome);
                 pessoaExistente.SetEmail(pessoa.Email);
-                pessoaExistente.SetDataNascimento(pessoa.DataNascimento);
+                pessoaExistente.SetDataNascimento(dataNascimento);
                 pessoaExistente.SetCpf(pessoa.Cpf);
                 pessoaExistente.SetEndereco(pessoa.Endereco);
                 pessoaExistente.SetSexo(pessoa.Sexo);
