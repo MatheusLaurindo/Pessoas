@@ -14,7 +14,6 @@ import {
 import { toast } from "react-toastify";
 import { PencilSimple, Trash } from "phosphor-react";
 import { CadastroPessoaDialog } from "../formulario";
-import type { UUID } from "crypto";
 
 const columns = [
   { title: "Nome", name: "nome" },
