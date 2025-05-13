@@ -8,7 +8,7 @@
             {
                 options.AddPolicy("AllowSpecificOrigin", builder =>
                 {
-                    builder.WithOrigins("https://localhost:3000", "https://happy-rock-09827ea10.6.azurestaticapps.net")
+                    builder.WithOrigins("https://localhost:53253", "https://desafio-pessoas-fjbmggemepfwdefd.brazilsouth-01.azurewebsites.net")
                            .AllowAnyHeader()
                            .AllowAnyMethod()
                            .AllowCredentials();

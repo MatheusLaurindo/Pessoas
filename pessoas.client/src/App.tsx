@@ -1,5 +1,9 @@
+import { RouterProvider } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
+import { router } from './routes';
+
 function App() {
-  return <div className="text-red-500">PESSOAS</div>;
+  return <RouterProvider router={router} />;
 }
 
 export default App;
