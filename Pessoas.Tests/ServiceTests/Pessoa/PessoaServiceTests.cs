@@ -5,6 +5,7 @@ using Pessoas.Server.Infra;
 using Pessoas.Server.Model;
 using Pessoas.Server.Repositories;
 using Pessoas.Server.Services;
+using System.Globalization;
 
 namespace Tests.ServiceTests.Pessoa;
 
@@ -51,7 +52,7 @@ public class PessoaServiceTests
         var pessoa = Pessoas.Server.Model.Pessoa.Create(
             "João",
             "joao@email.com",
-            DateTime.Today.AddYears(-30),
+            DateTime.UtcNow.AddYears(-25),
             "123.456.789-00",
             Sexo.Masculino,
             Nacionalidade.Brasileira,
@@ -336,7 +337,7 @@ public class PessoaServiceTests
             Id = pessoa.Id,
             Nome = "Ana Atualizada",
             Email = "ananova.com",
-            DataNascimento = Convert.ToDateTime(pessoa.DataNascimento).ToShortDateString(),
+            DataNascimento = "11/11/2002",
             Cpf = pessoa.Cpf,
             Sexo = pessoa.Sexo,
             Nacionalidade = pessoa.Nacionalidade,
@@ -378,7 +379,7 @@ public class PessoaServiceTests
             Id = pessoa.Id,
             Nome = "",
             Email = "ana@nova.com",
-            DataNascimento = Convert.ToDateTime(pessoa.DataNascimento).ToShortDateString(),
+            DataNascimento = "11/11/2002",
             Cpf = pessoa.Cpf,
             Sexo = pessoa.Sexo,
             Nacionalidade = pessoa.Nacionalidade,
@@ -420,7 +421,7 @@ public class PessoaServiceTests
             Id = pessoa.Id,
             Nome = pessoa.Nome,
             Email = pessoa.Email,
-            DataNascimento = Convert.ToDateTime(pessoa.DataNascimento).ToShortDateString(),
+            DataNascimento = "11/11/2002",
             Cpf = "12341342.245245-2534234",
             Sexo = pessoa.Sexo,
             Nacionalidade = pessoa.Nacionalidade,
