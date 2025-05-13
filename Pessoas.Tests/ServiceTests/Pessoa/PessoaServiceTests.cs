@@ -115,7 +115,7 @@ public class PessoaServiceTests
         {
             Nome = "João",
             Email = "joao@email.com",
-            DataNascimento = DateTime.Today.AddYears(-25),
+            DataNascimento = "20/09/1998",
             Cpf = "111.111.111-11",
             Sexo = Sexo.Masculino,
             Nacionalidade = Nacionalidade.Brasileira,
@@ -144,7 +144,7 @@ public class PessoaServiceTests
         {
             Nome = "João",
             Email = "joao@email.com",
-            DataNascimento = DateTime.Today.AddYears(-25),
+            DataNascimento = "20/09/1998",
             Cpf = "123.456.789-01",
             Sexo = Sexo.Masculino,
             Nacionalidade = Nacionalidade.Brasileira,
@@ -170,7 +170,7 @@ public class PessoaServiceTests
         {
             Nome = "João",
             Email = "joao@email.com",
-            DataNascimento = DateTime.Today.AddYears(-25),
+            DataNascimento = "20/09/1998",
             Cpf = "123.123.123.222.1",
             Sexo = Sexo.Masculino,
             Nacionalidade = Nacionalidade.Brasileira,
@@ -197,7 +197,7 @@ public class PessoaServiceTests
         {
             Nome = "João",
             Email = "emailinvalidoteste",
-            DataNascimento = DateTime.Today.AddYears(-25),
+            DataNascimento = "20/09/1998",
             Cpf = "123.123.123-12",
             Sexo = Sexo.Masculino,
             Nacionalidade = Nacionalidade.Brasileira,
@@ -224,7 +224,7 @@ public class PessoaServiceTests
         {
             Nome = "",
             Email = "email@gmail.com",
-            DataNascimento = DateTime.Today.AddYears(-25),
+            DataNascimento = "20/09/1998",
             Cpf = "123.123.123-12",
             Sexo = Sexo.Masculino,
             Nacionalidade = Nacionalidade.Brasileira,
@@ -251,7 +251,7 @@ public class PessoaServiceTests
         {
             Nome = "joao da silva",
             Email = "email@gmail.com",
-            DataNascimento = DateTime.UtcNow.AddDays(10),
+            DataNascimento = DateTime.UtcNow.AddYears(1).ToShortDateString(),
             Cpf = "123.123.123-12",
             Sexo = Sexo.Masculino,
             Nacionalidade = Nacionalidade.Brasileira,

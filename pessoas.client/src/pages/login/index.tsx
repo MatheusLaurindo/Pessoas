@@ -49,13 +49,13 @@ export default function Login() {
   }
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      <div className="bg-primary text-white flex items-center justify-center p-8 md:w-1/2">
+      <div className="hidden md:flex bg-primary text-white items-center justify-center p-8 md:w-1/2">
         <div className="max-w-md text-center">
           <h1 className="text-4xl font-bold mb-4">SEJA BEM VINDO!</h1>
           <p className="text-lg">Faça o login para continuar</p>
         </div>
       </div>
-      <div className="flex items-center justify-center p-8 md:w-1/2">
+      <div className="flex items-center justify-center p-4 md:w-1/2 mt-16 md:mt-0">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold text-center">
@@ -65,8 +65,8 @@ export default function Login() {
               Entre com seu email e senha para acessar sua conta.
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <CardContent>
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
@@ -95,13 +95,13 @@ export default function Login() {
                   </span>
                 </div>
               </div>
-              <CardFooter>
-                <Button type="submit" className="w-full bg-primary">
-                  Entrar
-                </Button>
-              </CardFooter>
-            </form>
-          </CardContent>
+            </CardContent>
+            <CardFooter>
+              <Button type="submit" className="w-full bg-primary -mt-5">
+                Entrar
+              </Button>
+            </CardFooter>
+          </form>
         </Card>
       </div>
     </div>
