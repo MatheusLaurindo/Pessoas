@@ -1,7 +1,6 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Pagination } from "../../../components/Pagination";
 import type { GetPessoaResp } from "../../../types/DTOs/response/pessoas";
-import type { APIPaginatedResponse } from "../../../types/APITypedResponse";
 import { pessoaService } from "../../../service/pessoas.service";
 import {
   Table,
@@ -13,49 +12,55 @@ import {
 } from "../../../components/ui/table";
 import { toast } from "react-toastify";
 import { PencilSimple, Trash } from "phosphor-react";
-import { CadastroPessoaDialog } from "../formulario";
+import { useQuery } from "@tanstack/react-query";
+import { queryClient } from "../../../main";
+import { AlertDialog } from "@radix-ui/react-alert-dialog";
+import {
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../../../components/ui/alert-dialog";
+import { Formulario } from "../formulario";
+import { Button } from "../../../components/ui/button";
 
 const columns = [
   { title: "Nome", name: "nome" },
   { title: "Email", name: "email" },
   { title: "Data de Nascimento", name: "dataNascimento" },
   { title: "Sexo", name: "sexo" },
-  { title: "Endereço", name: "endereco" },
   { title: "Nacionalidade", name: "nacionalidade" },
   { title: "Naturalidade", name: "naturalidade" },
 ];
 
 export default function Listagem() {
-  const [data, setData] = useState<APIPaginatedResponse<GetPessoaResp>>({
-    total: 0,
-    dados: [],
-  });
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10);
+
+  const [id, setId] = useState("");
+
+  const [openCadastro, setOpenCadastro] = useState(false);
+  const [openEdicao, setOpenEdicao] = useState(false);
+
+  const [openModalExcluir, setOpenModalExcluir] = useState(false);
 
   function handlePaginated(pageIndex: number) {
     setPage(pageIndex);
   }
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await pessoaService.getPessoasPaginado(
-          page,
-          rowsPerPage
-        );
-        setData(response);
-      } catch (err) {
-        toast.error("Erro ao buscar dados");
-      }
-    }
+  const { data } = useQuery({
+    queryKey: ["get-pessoas-paginado", page, rowsPerPage],
+    queryFn: async () =>
+      await pessoaService.getPessoasPaginado(page, rowsPerPage),
+  });
 
-    fetchData();
-  }, [page]);
-
-  function handleEdit(id: string) {
-    alert(`Editar item com ID: ${id}`);
-  }
+  const handleCloseModal = () => {
+    setOpenModalExcluir(false);
+    setId("");
+  };
 
   async function handleDelete(id: string) {
     await pessoaService
@@ -64,6 +69,10 @@ export default function Listagem() {
       .catch(() => {
         toast.error("Erro ao deletar pessoa");
       });
+
+    handleCloseModal();
+
+    queryClient.refetchQueries({ queryKey: ["get-pessoas-paginado"] });
   }
 
   return (
@@ -78,7 +87,12 @@ export default function Listagem() {
           </p>
         </div>
         <div>
-          <CadastroPessoaDialog />
+          <Button
+            onClick={() => setOpenCadastro(!openCadastro)}
+            className="bg-zinc-800 text-white"
+          >
+            Adicionar Pessoa
+          </Button>
         </div>
       </div>
       <Table className="table-auto bg-background border-collapse w-full">
@@ -114,12 +128,18 @@ export default function Listagem() {
                   <PencilSimple
                     size={20}
                     className="text-blue-500 cursor-pointer hover:text-blue-700"
-                    onClick={() => handleEdit(id)}
+                    onClick={() => {
+                      setId(id);
+                      setOpenEdicao(true);
+                    }}
                   />
                   <Trash
                     size={20}
                     className="text-red-500 cursor-pointer hover:text-red-700"
-                    onClick={() => handleDelete(id)}
+                    onClick={() => {
+                      setId(id);
+                      setOpenModalExcluir(true);
+                    }}
                   />
                 </TableCell>
               </TableRow>
@@ -129,10 +149,45 @@ export default function Listagem() {
       </Table>
       <Pagination
         pageIndex={page}
-        totalCount={data.total}
+        totalCount={data?.total}
         rowsPerPage={rowsPerPage}
         onPageChange={handlePaginated}
       />
+
+      {openCadastro && (
+        <Formulario
+          open={openCadastro}
+          onOpenChange={() => setOpenCadastro(!openCadastro)}
+        />
+      )}
+
+      {openEdicao && id && (
+        <Formulario
+          id={id}
+          open={openEdicao}
+          onOpenChange={() => setOpenEdicao(!openEdicao)}
+        />
+      )}
+
+      {openModalExcluir && (
+        <AlertDialog open={openModalExcluir} onOpenChange={handleCloseModal}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Está ação não pode ser desfeita. Você tem certeza que deseja
+                excluir essa pessoa?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction onClick={() => handleDelete(id)}>
+                Excluir
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   );
 }

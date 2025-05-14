@@ -97,6 +97,10 @@ namespace Pessoas.Server.Services
             {
                 return Result<GetPessoaResp>.Falha(ex.Message);
             }
+            catch (ArgumentException ex)
+            {
+                return Result<GetPessoaResp>.Falha(ex.Message);
+            }
         }
 
         public async Task<Result<Guid>> DeleteAsync(Guid id)
