@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -14,7 +11,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../../../components/ui/dialog";
 import {
   Form,
@@ -42,8 +38,12 @@ import { cn } from "../../../lib/utils";
 import { pessoaService } from "../../../service/pessoas.service";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { queryClient } from "../../../main";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 const formSchema = z.object({
+  id: z.string().nullable(),
   nome: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
   email: z.string().email({ message: "Email inválido" }).nullable(),
   dataNascimento: z
@@ -97,13 +97,25 @@ const nacionalidades = [
   { label: "Angolana", value: 26 },
 ];
 
-export function CadastroPessoaDialog() {
+export type FormularioCadatro = {
+  id?: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
+
+export function Formulario({ id, open, onOpenChange }: FormularioCadatro) {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+
+  const { data } = useQuery({
+    queryKey: ["get-pessoas-by-id", id],
+    queryFn: async () => await pessoaService.getPessoaById(id),
+    enabled: !!id,
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      id: null,
       nome: "",
       email: null,
       cpf: "",
@@ -115,21 +127,51 @@ export function CadastroPessoaDialog() {
     },
   });
 
-  async function onSubmit(data: FormData) {
-    await pessoaService
-      .postPessoa({
-        ...data,
-        email: data.email ?? undefined,
-        endereco: data.endereco ?? undefined,
-        naturalidade: data.naturalidade ?? undefined,
-      })
-      .then(() => {
-        toast.success("Pessoa cadastrada com sucesso!");
-        navigate("/");
-      })
-      .catch(() => toast.error("Erro ao cadastrar a pessoa"));
+  useEffect(() => {
+    if (data) {
+      form.reset({
+        id: data.data.id ?? null,
+        nome: data.data.nome ?? "",
+        email: data.data.email ?? null,
+        cpf: formatCPF(data.data.cpf ?? ""),
+        endereco: data.data.endereco ?? null,
+        naturalidade: data.data.naturalidade ?? null,
+        nacionalidade:
+          nacionalidades.find((n) => n.label === data.data.nacionalidade)
+            ?.value ?? 0,
+        sexo: sexos.find((s) => s.label === data.data.sexo)?.value ?? 0,
+        dataNascimento: formatDate(data.data.dataNascimento ?? ""),
+      });
+    }
+  }, [data, form]);
 
-    setOpen(false);
+  async function onSubmit(data: FormData) {
+    if (id && data.id) {
+      await pessoaService
+        .putPessoa(data)
+        .then(() => {
+          toast.success("Pessoa editada com sucesso!");
+          queryClient.refetchQueries({ queryKey: ["get-pessoas-paginado"] });
+          navigate("/");
+        })
+        .catch(() => toast.error("Erro ao editar a pessoa"));
+    } else {
+      await pessoaService
+        .postPessoa({
+          ...data,
+          email: data.email ?? undefined,
+          endereco: data.endereco ?? undefined,
+          naturalidade: data.naturalidade ?? undefined,
+        })
+        .then(() => {
+          toast.success("Pessoa cadastrada com sucesso!");
+          queryClient.refetchQueries({ queryKey: ["get-pessoas-paginado"] });
+          navigate("/");
+        })
+        .catch(() => toast.error("Erro ao cadastrar a pessoa"));
+    }
+
+    onOpenChange(false);
     form.reset();
   }
 
@@ -177,10 +219,7 @@ export function CadastroPessoaDialog() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="bg-zinc-800 text-zinc-200">Cadastrar Pessoa</Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Cadastro de Pessoa</DialogTitle>
@@ -432,7 +471,7 @@ export function CadastroPessoaDialog() {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setOpen(false)}
+                onClick={() => onOpenChange(false)}
               >
                 Cancelar
               </Button>

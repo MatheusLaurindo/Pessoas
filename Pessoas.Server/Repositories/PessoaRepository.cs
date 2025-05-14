@@ -35,7 +35,7 @@ namespace Pessoas.Server.Repositories
                 Id = p.Id,
                 Nome = p.Nome,
                 Email = p.Email,
-                DataNascimento = p.DataNascimento.ToShortDateString(),
+                DataNascimento = p.DataNascimento.ToString("dd/MM/yyyy"),
                 Cpf = p.Cpf,
                 Sexo = p.Sexo?.ToString() == "0" ? "" : p.Sexo.ToString(),
                 Nacionalidade = p.Nacionalidade?.ToString() == "0" ? "" : p.Nacionalidade.ToString(),
@@ -77,7 +77,7 @@ namespace Pessoas.Server.Repositories
                 .FirstOrDefaultAsync(x => x.Cpf == pessoa.Cpf);
 
             if (pessoaCpf != null && pessoaCpf.Id != pessoa.Id)
-                throw new DominioInvalidoException("Este CPF já está cadastrado para outra pessoa.");
+                throw new ArgumentException("Este CPF já está cadastrado para outra pessoa.");
 
             pessoa.SetDataAtualizacao();
 

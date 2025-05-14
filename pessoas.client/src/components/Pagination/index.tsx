@@ -3,7 +3,7 @@ import { CaretDoubleLeft, CaretDoubleRight, CaretLeft, CaretRight } from "phosph
 
 export interface PaginationProps {
   pageIndex: number;
-  totalCount: number;
+  totalCount?: number;
   rowsPerPage: number;
   onPageChange: (pageIndex: number) => Promise<void> | void;
 }
@@ -14,7 +14,7 @@ export function Pagination({
   rowsPerPage,
   onPageChange,
 }: PaginationProps) {
-  const pages = Math.ceil(totalCount / rowsPerPage) || 1;
+  const pages = Math.ceil((totalCount ?? 0) / rowsPerPage) || 1;
 
   return (
     <div className="flex items-center justify-between">
