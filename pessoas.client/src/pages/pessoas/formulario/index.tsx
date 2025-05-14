@@ -222,9 +222,9 @@ export function Formulario({ id, open, onOpenChange }: FormularioCadatro) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Cadastro de Pessoa</DialogTitle>
+          <DialogTitle>{id ? "Edição de Dados" : "Cadastro de Pessoa"}</DialogTitle>
           <DialogDescription>
-            Preencha os dados para cadastrar uma nova pessoa no sistema.
+            Preencha os dados da pessoa para continuar.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

@@ -63,7 +63,7 @@ namespace Pessoas.Server.Services
 
                 return Result<GetPessoaResp>.Sucesso(result.ToDto());
             }
-            catch (DominioInvalidoException ex)
+            catch (Exception ex)
             {
                 return Result<GetPessoaResp>.Falha(ex.Message);
             }
@@ -93,11 +93,7 @@ namespace Pessoas.Server.Services
 
                 return Result<GetPessoaResp>.Sucesso(result.ToDto());
             }
-            catch (DominioInvalidoException ex)
-            {
-                return Result<GetPessoaResp>.Falha(ex.Message);
-            }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
                 return Result<GetPessoaResp>.Falha(ex.Message);
             }

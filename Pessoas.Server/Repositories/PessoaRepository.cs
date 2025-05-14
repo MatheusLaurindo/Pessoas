@@ -61,7 +61,7 @@ namespace Pessoas.Server.Repositories
                 .AnyAsync(x => x.Cpf == pessoa.Cpf);
 
             if (cpfExiste)
-                throw new DominioInvalidoException("Este CPF já está cadastrado para outra pessoa.");
+                throw new Exception("Este CPF já está cadastrado para outra pessoa.");
 
             _contexto.Pessoas.Add(pessoa);
 
@@ -77,7 +77,7 @@ namespace Pessoas.Server.Repositories
                 .FirstOrDefaultAsync(x => x.Cpf == pessoa.Cpf);
 
             if (pessoaCpf != null && pessoaCpf.Id != pessoa.Id)
-                throw new ArgumentException("Este CPF já está cadastrado para outra pessoa.");
+                throw new Exception("Este CPF já está cadastrado para outra pessoa.");
 
             pessoa.SetDataAtualizacao();
 
