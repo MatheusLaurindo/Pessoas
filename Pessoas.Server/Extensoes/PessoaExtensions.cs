@@ -1,5 +1,6 @@
 ﻿using Pessoas.Server.DTOs.Response;
 using Pessoas.Server.Model;
+using System.Globalization;
 
 namespace Pessoas.Server.Extensoes
 {
@@ -11,7 +12,7 @@ namespace Pessoas.Server.Extensoes
                 Id = p.Id,
                 Nome = p.Nome,
                 Email = p.Email,
-                DataNascimento = p.DataNascimento.ToShortDateString(),
+                DataNascimento = p.DataNascimento.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
                 Cpf = p.Cpf,
                 Sexo = p.Sexo.ToString(),
                 Nacionalidade = p.Nacionalidade.ToString(),
