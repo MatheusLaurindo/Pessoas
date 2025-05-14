@@ -20,7 +20,7 @@ namespace Pessoas.Server.Controllers
         /// </summary>
         [AppAuthorize(Permissao.Visualizar_Pessoa)]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(APITypedResponse<IEnumerable<GetPessoaResp>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllAsync()
         {
             var pessoas = await _service.GetAllAsync();
@@ -35,7 +35,7 @@ namespace Pessoas.Server.Controllers
         /// <param name="linhasPorPagina">Quantidade de registros por página.</param>
         [AppAuthorize(Permissao.Visualizar_Pessoa)]
         [HttpGet("paginado")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(APIPaginatedResponse<IEnumerable<GetPessoaResp>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPaginatedAsync(int pagina = 1, int linhasPorPagina = 10)
         {
             var pessoas = await _service.GetAllPaginatedAsync(pagina, linhasPorPagina);
@@ -49,7 +49,7 @@ namespace Pessoas.Server.Controllers
         /// <param name="id">ID da pessoa.</param>
         [AppAuthorize(Permissao.Visualizar_Pessoa)]
         [HttpGet("{id:guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(APITypedResponse<GetPessoaResp>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
@@ -67,7 +67,7 @@ namespace Pessoas.Server.Controllers
         /// <param name="id">ID da pessoa a ser removida.</param>
         [AppAuthorize(Permissao.Remover_Pessoa)]
         [HttpDelete("{id:guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(APITypedResponse<Guid>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteAsync(Guid id)
