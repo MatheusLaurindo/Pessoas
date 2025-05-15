@@ -82,10 +82,10 @@ export default function Login() {
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">Senha</Label>
                   </div>
                   <Input
-                    id="password"
+                    id="senha"
                     type="password"
                     {...register("senha")}
                     required
